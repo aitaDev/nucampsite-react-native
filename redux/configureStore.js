@@ -7,14 +7,16 @@ import { promotions } from './promotions';
 import { partners } from './partners';
 
 export const ConfigureStore = () => {
+	//adds good defaults to createStore set up. https://redux.js.org/recipes/configuring-your-store
 	const store = createStore(
 		combineReducers({
+			//all the reducers combined here
 			campsites,
 			comments,
 			partners,
 			promotions,
 		}),
-		applyMiddleware(thunk, logger)
+		applyMiddleware(thunk, logger) //logger helps debug, thunk allows return of object from creators
 	);
 
 	return store;

@@ -1,6 +1,7 @@
 import * as ActionTypes from './ActionTypes';
-import { baseUrl } from '../shared/baseUrl';
+import { baseUrl } from '../shared/baseUrl'; //IP address
 
+//wrapping action creator in an additional function so thunk can intercept before going to reducer
 export const fetchComments = () => (dispatch) => {
 	return fetch(baseUrl + 'comments')
 		.then(
@@ -20,9 +21,9 @@ export const fetchComments = () => (dispatch) => {
 				throw errMess;
 			}
 		)
-		.then((response) => response.json())
-		.then((comments) => dispatch(addComments(comments)))
-		.catch((error) => dispatch(commentsFailed(error.message)));
+		.then((response) => response.json()) //creates another promise and creates object
+		.then((comments) => dispatch(addComments(comments))) //dispatches action with object
+		.catch((error) => dispatch(commentsFailed(error.message))); //dispatches error if failed
 };
 
 export const commentsFailed = (errMess) => ({
