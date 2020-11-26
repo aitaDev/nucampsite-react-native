@@ -1,7 +1,11 @@
 import * as ActionTypes from './ActionTypes';
 
 export const partners = (
-	state = { isLoading: true, errMess: null, partners: [] },
+	state = {
+		isLoading: true,
+		errMess: null,
+		partners: [],
+	},
 	action
 ) => {
 	switch (action.type) {

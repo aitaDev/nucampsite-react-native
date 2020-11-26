@@ -17,6 +17,20 @@ import CampsiteInfo from './CampsiteInfoComponent';
 import About from './AboutComponent';
 import Contact from './ContactComponent';
 import SafeAreaView from 'react-native-safe-area-view';
+import { connect } from 'react-redux';
+import {
+	fetchCampsites,
+	fetchComments,
+	fetchPromotions,
+	fetchPartners,
+} from '../redux/ActionCreators';
+
+mapDispatchToProps = {
+	fetchCampsites,
+	fetchComments,
+	fetchPartners,
+	fetchPromotions,
+};
 
 const DirectoryNavigator = createStackNavigator(
 	{
@@ -190,7 +204,7 @@ const MainNavigator = createDrawerNavigator(
 				),
 			},
 		},
-	}, 
+	},
 	{
 		drawerBackgroundColor: '#CEC8FF',
 		contentComponent: CustomDrawerContentComponent,
@@ -200,6 +214,13 @@ const MainNavigator = createDrawerNavigator(
 const AppNavigator = createAppContainer(MainNavigator);
 
 class Main extends Component {
+	componentDidMount() {
+		this.props.fetchCampsites();
+		this.props.fetchComments();
+		this.props.fetchPartners();
+		this.props.fetchPromotions();
+	}
+
 	render() {
 		return (
 			<View
@@ -244,4 +265,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Main;
+export default connect(null, mapDispatchToProps)(Main);
