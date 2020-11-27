@@ -5,6 +5,7 @@ import { campsites } from './campsites';
 import { comments } from './comments';
 import { promotions } from './promotions';
 import { partners } from './partners';
+import { favorites } from './favorites';
 
 export const ConfigureStore = () => {
 	//adds good defaults to createStore set up. https://redux.js.org/recipes/configuring-your-store
@@ -15,6 +16,7 @@ export const ConfigureStore = () => {
 			comments,
 			partners,
 			promotions,
+			favorites,
 		}),
 		applyMiddleware(thunk, logger) //logger helps debug, thunk allows return of object from creators
 	);
