@@ -6,11 +6,19 @@ import { comments } from './comments';
 import { promotions } from './promotions';
 import { partners } from './partners';
 import { favorites } from './favorites';
+import { persistStore, persistCombineReducers } from 'redux-persist';
+import storage from 'redux-persist/es/storage';
+
+const config = {
+	key: 'root',
+	storage,
+	debug: true,
+};
 
 export const ConfigureStore = () => {
 	//adds good defaults to createStore set up. https://redux.js.org/recipes/configuring-your-store
 	const store = createStore(
-		combineReducers({
+		persistCombineReducers(config, {
 			//all the reducers combined here
 			campsites,
 			comments,
@@ -21,5 +29,7 @@ export const ConfigureStore = () => {
 		applyMiddleware(thunk, logger) //logger helps debug, thunk allows return of object from creators
 	);
 
-	return store;
+	const persistor = persistStore(store);
+
+	return { persistor, store };
 };
