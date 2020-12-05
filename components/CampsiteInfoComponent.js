@@ -7,6 +7,8 @@ import {
 	Modal,
 	Button,
 	StyleSheet,
+	Alert,
+	PanResponder,
 } from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -48,13 +50,13 @@ function RenderComments({ comments }) {
 
 	return (
 		<Animatable.View animation='fadeInUp' duration={2000} delay={1000}>
-		<Card title='Comments'>
-			<FlatList
-				data={comments}
-				renderItem={renderCommentItem}
-				keyExtractor={(item) => item.id.toString()}
-			/>
-		</Card>
+			<Card title='Comments'>
+				<FlatList
+					data={comments}
+					renderItem={renderCommentItem}
+					keyExtractor={(item) => item.id.toString()}
+				/>
+			</Card>
 		</Animatable.View>
 	);
 }
@@ -62,9 +64,45 @@ function RenderComments({ comments }) {
 function RenderCampsite(props) {
 	const { campsite } = props;
 
+	const recognizeDrag = ({ dx }) => (dx < -200 ? true : false);
+
+	const panResponder = PanResponder.create({
+		onStartShouldSetPanResponder: () => true,
+		onPanResponderEnd: (e, gestureState) => {
+			console.log('pan responder end', gestureState);
+			if (recognizeDrag(gestureState)) {
+				Alert.alert(
+					'Add Favorite',
+					'Are you sure you wish to add ' + campsite.name + ' to favorites?',
+					[
+						{
+							text: 'Cancel',
+							style: 'cancel',
+							onPress: () => console.log('Cancel Pressed'),
+						},
+						{
+							text: 'OK',
+							onPress: () =>
+								props.favorite
+									? console.log('Already set as a favorite')
+									: props.markFavorite(),
+						},
+					],
+					{ cancelable: false }
+				);
+			}
+			return true;
+		},
+	});
+
 	if (campsite) {
 		return (
-			<Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+			<Animatable.View
+				animation='fadeInDown'
+				duration={2000}
+				delay={1000}
+				{...panResponder.panHandlers}
+			>
 				<Card
 					featuredTitle={campsite.name}
 					image={{ uri: baseUrl + campsite.image }}
